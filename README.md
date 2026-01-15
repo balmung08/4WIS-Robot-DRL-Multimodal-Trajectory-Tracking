@@ -52,6 +52,9 @@ pip install torch==2.7.0+cu128 --extra-index-url https://download.pytorch.org/wh
 ### Discussion and Notes
 
 * The design of the state space and action space adopts an MPC-like preview optimization modeling concept, endowing the tracker with a certain level of foresight, allowing it to adjust control strategies in advance according to upcoming trajectory changes
+
+* We added wheel angle and speed calculations based on the Ackerman steering principle to the paper, which can reduce wear on robot tires and increase execution efficiency in actual deployment.
+
 * Compared with a pure DNN structure, the introduction of LSTM shows certain improvements in both trajectory tracking accuracy and stability, as illustrated by the quantitative comparison shown below
 
 <p align="center"><img src="document/compare.png" width="80%"></p>
@@ -134,6 +137,9 @@ pip install torch==2.7.0+cu128 --extra-index-url https://download.pytorch.org/wh
 ### 讨论与记录
 
 * 状态空间与动作空间设计采用类似 MPC 前视优化的建模思想，使得跟踪器具备一定的前瞻能力，能够针对前方轨迹变化提前调整控制策略
+
+* 我们在论文的基础上增加了基于阿克曼转向原理的车轮转角与速度解算，在实际部署时可以降低对机器人轮胎的磨损并增加执行效率
+
 * 相较于纯 DNN 结构，引入 LSTM 后在轨迹跟踪精度与稳定性方面均表现出一定提升，其定量对比如下图所示
 
 <p align="center"><img src="document/compare.png" width="80%"></p>
