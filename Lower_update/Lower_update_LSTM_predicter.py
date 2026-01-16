@@ -31,7 +31,7 @@ def run(model_path, episodes=10, deterministic=True, render=True):
 
             if render:
                 env.render()
-                time.sleep(0.05)
+                time.sleep(0.02)
 
         print(f"Episode {ep+1} Reward: {ep_reward:.2f}")
 
@@ -41,8 +41,8 @@ def run(model_path, episodes=10, deterministic=True, render=True):
 
 def main():
     parser = argparse.ArgumentParser()
-
-    parser.add_argument("--model", type=str, default="../checkpoints/LSTM_best_models/best_model")
+    # 环境和模型得配套改
+    parser.add_argument("--model", type=str, default="../checkpoints/mode-1/LSTM_best_models/best_model")
     parser.add_argument("--episodes", type=int, default=20)
     parser.add_argument("--render", default=True)
     args = parser.parse_args()

@@ -13,7 +13,19 @@
 
 <p align="center"><img src="document/method.jpg" width="90%"></p>
 
-> At present, the code for the kinematic iterator, trajectory generator, and the Ackermann single-mode trajectory tracker has been organized. The remaining modes and decision modules will be gradually open-sourced in the near future.
+<table>
+  <tr>
+    <td style="vertical-align: middle; padding-right: 20px; width: 50%;">
+      At present, the code for the kinematic iterator, trajectory generator, 
+      and the Ackermann single-mode trajectory tracker has been organized. 
+      The remaining modes and decision modules will be gradually open-sourced 
+      in the near future.
+    </td>
+    <td style="text-align: center; width: 30%;">
+      <img src="document/mode1.gif" width="100%">
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -98,7 +110,19 @@ If this code repository is helpful to your research, please cite the following p
 
 <p align="center"><img src="document/method.jpg" width="90%"></p>
 
-> 目前已完成运动学迭代器、轨迹生成器以及 Ackermann 单模态轨迹跟踪器的代码整理，其余模态与决策模块将于近日陆续开源
+
+
+<table>
+  <tr>
+    <td style="vertical-align: middle; padding-right: 20px; width: 50%;">
+      目前已完成运动学迭代器、轨迹生成器以及 Ackermann 单模态轨迹跟踪器的代码整理，其余模态与决策模块将于近日陆续开源
+    </td>
+    <td style="text-align: center; width: 30%;">
+      <img src="document/mode1.gif" width="100%">
+    </td>
+  </tr>
+</table>
+
 
 ---
 

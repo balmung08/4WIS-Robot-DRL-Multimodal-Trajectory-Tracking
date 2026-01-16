@@ -46,7 +46,7 @@ class TrajLSTMFeatureExtractor(BaseFeaturesExtractor):
 def main():
     # ===== 配置参数 =====
     total_steps = 1000000
-    guided_steps = 100000  # 前一半步数使用指导模型
+    guided_steps = 200000  # 前一半步数使用指导模型
     log_dir = "../checkpoints/LSTM_best_models/"
     os.makedirs(log_dir, exist_ok=True)
 
@@ -71,7 +71,7 @@ def main():
         env=env,
         policy_kwargs=policy_kwargs,
         learning_rate=1e-4,
-        buffer_size=1000000,
+        buffer_size=2000000,
         batch_size=128,
         train_freq=2,
         gradient_steps=1,

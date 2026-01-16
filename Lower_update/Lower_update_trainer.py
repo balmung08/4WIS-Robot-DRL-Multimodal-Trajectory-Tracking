@@ -25,6 +25,7 @@ def main():
         learning_starts=1000,
         tensorboard_log="../sac_tensorboard/"
     )
+    # model = SAC.load("../checkpoints/DNN_best_models/best_model", env=env)
     new_logger = configure("../sac_tensorboard/", ["stdout", "tensorboard"])
     model.set_logger(new_logger)
 

@@ -40,6 +40,7 @@ class SimulationEnv(gym.Env):
     ACCEL_WEIGHT = 0.002  # 加速平滑系数
     DEVIATION_PENALTY = 100.0  # 偏移惩罚
     MAX_DEVIATION = 2.0  # 偏移判断阈值
+    # 相较于论文，距离奖励与平滑奖励比例不变，整体大小缩小10倍
 
     def __init__(self,
                  prediction_horizon: int = DEFAULT_PREDICTION_HORIZON,
@@ -341,7 +342,7 @@ class SimulationEnv(gym.Env):
 
         # ==================== 奖励计算部分 ====================
         reward = 0.0
-        discount_rate = 0.8
+        discount_rate = 0.9
 
         for state_info in trajectory_states:
             i = state_info['step']
@@ -356,7 +357,7 @@ class SimulationEnv(gym.Env):
             )[0])
 
             # 位置偏差惩罚
-            distance_error = np.linalg.norm(ref_state[:2])
+            distance_error = np.linalg.norm(ref_state[:2]) * (discount_rate ** i)
             reward -= distance_error
 
             # 控制量惩罚
@@ -379,7 +380,7 @@ class SimulationEnv(gym.Env):
                 info["err"] = ref_state
                 et = np.abs(ref_state[2])
                 info["et"] = et if et <= np.pi else et - 2 * np.pi
-
+        # print(reward)
         # ==================== 状态更新部分 ====================
         # 回滚到第一步后的状态
         self.traj_index = origin_index + 1

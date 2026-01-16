@@ -42,7 +42,7 @@ def run(model_path, episodes=10, deterministic=True, render=True):
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model", type=str, default="../checkpoints/DNN_best_models/best_model")
+    parser.add_argument("--model", type=str, default="../checkpoints/mode-1/DNN_best_models/best_model")
     parser.add_argument("--episodes", type=int, default=20)
     parser.add_argument("--render", default=False)
     args = parser.parse_args()
