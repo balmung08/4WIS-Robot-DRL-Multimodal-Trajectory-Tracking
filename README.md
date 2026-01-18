@@ -7,25 +7,21 @@
 
 ### Basic Functions
 
-* Implements a kinematic iterator and a multi-modal trajectory generator for 4WIS (Four-Wheel Independent Steering) robots, used to construct reinforcement learning training environments
-* Designs DRL-based trajectory trackers with MPC-like preview structural characteristics for different motion modes
-* Constructs an autonomous motion mode decision mechanism based on target trajectory characteristics, enabling reasonable switching within the multi-modal motion space
+* Implements a kinematic iterator and multi-modal trajectory generator for the 4WIS (Four-Wheel Independent Steering) robot, designed to construct reinforcement learning training environments
 
-<p align="center"><img src="document/method.jpg" width="90%"></p>
+* Designs a DRL-based trajectory tracker with MPC-based lookahead structure for different motion modes
 
-<table>
-  <tr>
-    <td style="vertical-align: middle; padding-right: 20px; width: 50%;">
-      At present, the code for the kinematic iterator, trajectory generator, 
-      and the Ackermann single-mode trajectory tracker has been organized. 
-      The remaining modes and decision modules will be gradually open-sourced 
-      in the near future.
-    </td>
-    <td style="text-align: center; width: 30%;">
-      <img src="document/mode1.gif" width="100%">
-    </td>
-  </tr>
-</table>
+* Develops an autonomous motion mode decision-making mechanism based on target trajectory characteristics, enabling reasonable mode switching within the multi-modal motion space
+
+<p align="center"><img src="document/method.jpg" width="100%"></p>
+
+> Demonstration of tracking performance under multiple motion modalities
+
+| ![GIF1](document/mode1.gif) | ![GIF2](document/mode2.gif) | ![GIF3](document/mode3.gif) |
+| ----------------------------- | ----------------------------- | ----------------------------- |
+| <div align="center" style="background-color: #f0f0f0;">Mode1: Ackermann Steering</div> | <div align="center" style="background-color: #f0f0f0;">Mode2: Lateral Steering</div> | <div align="center" style="background-color: #f0f0f0;">Mode3: Parallel Movement</div> |
+
+
 
 ---
 
@@ -40,40 +36,33 @@ pip install numpy==2.4.1
 pip install stable_baselines3==2.6.0
 pip install torch==2.7.0+cu128 --extra-index-url https://download.pytorch.org/whl/cu128
 ```
-
----
+-----
 
 ### Code Description
 
 * `utils/Trajectory_Generater.py`: Kinematic iterator and random reference trajectory generation module for the 4WIS robot
-
 * `utils/Trajectory_Transfer.py`: Auxiliary utility functions used during trajectory generation and format conversion
-
-* `env/mode1_env.py`: The tracker reinforcement learning environment, currently only supporting Ackerman mode, will be updated soon.
-
-* `Lower_update/Lower_update_trainer.py`: Training code for a single-mode trajectory tracker based on DNN-DRL
-
-* `Lower_update/Lower_update_predicter.py`: Testing code for a single-mode trajectory tracker based on DNN-DRL
-
-* `Lower_update/Lower_update_LSTM_trainer.py`: Training code for a single-mode trajectory tracker based on LSTM-DRL
-
-* `Lower_update/Lower_update_LSTM_predicter.py`: Testing code for a single-mode trajectory tracker based on LSTM-DRL
+* `env/mode1_env.py`: Trajectory tracker reinforcement learning environment for Ackermann steering
+* `env/mode2_env.py`: Trajectory tracker reinforcement learning environment for lateral Ackermann steering
+* `env/mode3_env.py`: Trajectory tracker reinforcement learning environment for parallel steering
+* `Lower_update/Lower_update_guided_trainer.py`: DNN-DRL-based single-modal trajectory tracker training code
+* `Lower_update/Lower_update_LSTM_trainer.py`: LSTM-DRL-based single-modal trajectory tracker training code
+* `Lower_update/Lower_update_LSTM_tester.py`: LSTM-DRL-based single-modal trajectory tracker testing code
 
 ---
 
 ### Discussion and Notes
 
-* The design of the state space and action space adopts an MPC-like preview optimization modeling concept, endowing the tracker with a certain level of foresight, allowing it to adjust control strategies in advance according to upcoming trajectory changes
-
-* We added wheel angle and speed calculations based on the Ackerman steering principle to the paper, which can reduce wear on robot tires and increase execution efficiency in actual deployment.
-
-* Compared with a pure DNN structure, the introduction of LSTM shows certain improvements in both trajectory tracking accuracy and stability, as illustrated by the quantitative comparison shown below
+* The design of the state and action spaces draws on MPC-based lookahead optimization methods, ensuring that the tracker has foresight and can adjust the control strategy based on changes in the trajectory ahead
+* In addition to the paper, we have added wheel angle and velocity calculation based on Ackermann steering principles, which helps reduce tire wear and improves execution efficiency
+* We introduced a discount factor in the future distance error term, which aids in making the deceleration to stop smoother at the terminal
+* Compared to pure DNN structures, the introduction of LSTM has led to improvements in trajectory tracking accuracy and stability. The quantitative comparison for the Ackermann mode is shown below
 
 <p align="center"><img src="document/compare.png" width="80%"></p>
 
-* It should be noted that the LSTM structure significantly increases the difficulty of convergence during training. Therefore, in practical training, a DNN-based tracker can be used as a prior or guiding model to improve stability and convergence speed in the early training stage. Relevant implementation details can be found in `Lower_update/Lower_update_LSTM_trainer.py`.
+* It is important to note that the convergence difficulty of the LSTM structure increases significantly during training. Therefore, during actual training, a DNN tracker can be used as a prior or guiding model to improve stability and convergence speed in the early stages. Relevant implementation details can be found in `Lower_update/Lower_update_LSTM_trainer.py`
+* The methods for mode decision-making can be categorized into three main approaches: the first is to allow network-based intelligent decision-making for early stopping; the second is to explore all possible modes to select, but it can only decide the next step without foresight; the third is that the given trajectory already includes mode information and deceleration process. ***In our future work, the trajectory planner will directly provide trajectories containing mode information, so the importance of the mode decision module will slightly decrease. The organization and open-source progress of this will be postponed for the time being***
 
-* In our subsequent work, the trajectory planner will provide trajectories that include modal information; therefore, the importance of the modal decision module will decrease slightly.
 
 ---
 
@@ -104,24 +93,18 @@ If this code repository is helpful to your research, please cite the following p
 
 ### 基本功能
 
-* 实现了面向 4WIS（Four-Wheel Independent Steering）机器人的运动学迭代器与多模态轨迹生成器，用于构建强化学习训练环境
-* 针对不同运动模态，设计了具有 MPC 前视结构特性的 DRL-based 轨迹跟踪器
-* 构建了基于目标轨迹特性的自主运动模态决策机制，用于在多模态运动空间中进行合理切换
+* 实现了面向 4WIS（四轮独立转向）机器人的运动学迭代器与多模态轨迹生成器，用于构建强化学习训练环境
+* 为不同的运动模态设计了基于 MPC 前视结构的 DRL（深度强化学习）轨迹跟踪器
+* 构建了一个基于目标轨迹特性的自主运动模态决策机制，能够在多模态运动空间中合理切换
 
 <p align="center"><img src="document/method.jpg" width="90%"></p>
 
+> 多运动模态下跟踪效果演示
 
+| ![GIF1](document/mode1.gif) | ![GIF2](document/mode2.gif) | ![GIF3](document/mode3.gif) |
+| ----------------------------- | ----------------------------- | ----------------------------- |
+| <div align="center" style="background-color: #f0f0f0;">Mode1: 阿克曼转向</div> | <div align="center" style="background-color: #f0f0f0;">Mode2: 横向转向</div> | <div align="center" style="background-color: #f0f0f0;">Mode3: 平行移动</div> |
 
-<table>
-  <tr>
-    <td style="vertical-align: middle; padding-right: 20px; width: 50%;">
-      目前已完成运动学迭代器、轨迹生成器以及 Ackermann 单模态轨迹跟踪器的代码整理，其余模态与决策模块将于近日陆续开源
-    </td>
-    <td style="text-align: center; width: 30%;">
-      <img src="document/mode1.gif" width="100%">
-    </td>
-  </tr>
-</table>
 
 
 ---
@@ -146,31 +129,36 @@ pip install torch==2.7.0+cu128 --extra-index-url https://download.pytorch.org/wh
 
 * `utils/Trajectory_Transfer.py`: 轨迹生成与格式转换过程中使用的辅助工具函数
 
-* `env/mode1_env.py`: 跟踪器强化学习环境，目前仅支持阿克曼模式，将于近日更新
+* `env/mode1_env.py`: 对应阿克曼转向的轨迹跟踪器强化学习环境
 
-* `Lower_update/Lower_update_trainer.py`: 基于 DNN-DRL 的单模态轨迹跟踪器训练代码
+* `env/mode2_env.py`: 对应横向转向的轨迹跟踪器强化学习环境
 
-* `Lower_update/Lower_update_predicter.py`: 基于 DNN-DRL 的单模态轨迹跟踪器测试代码
+* `env/mode3_env.py`: 对应平行移动的轨迹跟踪器强化学习环境
+
+* `Lower_update/Lower_update_guided_trainer.py`: 基于 DNN-DRL 的单模态轨迹跟踪器训练代码
 
 * `Lower_update/Lower_update_LSTM_trainer.py`: 基于 LSTM-DRL 的单模态轨迹跟踪器训练代码
 
-* `Lower_update/Lower_update_LSTM_predicter.py`: 基于 LSTM-DRL 的单模态轨迹跟踪器测试代码
+* `Lower_update/Lower_update_LSTM_tester.py`: 基于 LSTM-DRL 的单模态轨迹跟踪器测试代码
 
 ---
 
 ### 讨论与记录
 
-* 状态空间与动作空间设计采用类似 MPC 前视优化的建模思想，使得跟踪器具备一定的前瞻能力，能够针对前方轨迹变化提前调整控制策略
+* 状态空间与动作空间的设计借鉴了 MPC 前视优化的方法，确保跟踪器具备前瞻性，能够根据前方轨迹的变化提前调整控制策略
 
-* 我们在论文的基础上增加了基于阿克曼转向原理的车轮转角与速度解算，在实际部署时可以降低对机器人轮胎的磨损并增加执行效率
+* 在论文基础上，我们增加了基于阿克曼转向原理的车轮转角与速度解算，能够减少机器人轮胎的磨损并提升执行效率
 
-* 相较于纯 DNN 结构，引入 LSTM 后在轨迹跟踪精度与稳定性方面均表现出一定提升，其定量对比如下图所示
+* 通过测试，我们在未来的距离误差项中引入了折扣因子，这有助于提升终端减速至停止过程的平滑性
+
+* 与纯 DNN 结构相比，引入 LSTM 后，轨迹跟踪精度和稳定性有所提高。以下是阿克曼模态下的定量对比结果
 
 <p align="center"><img src="document/compare.png" width="80%"></p>
 
-* 需要注意的是，LSTM 结构在训练阶段的收敛难度显著增加。因此，在实际训练中可采用 DNN 跟踪器作为先验或指导模型，以提升训练初期的稳定性与收敛速度,相关实现细节可参考 `Lower_update/Lower_update_LSTM_trainer.py`
+* 需要注意的是，LSTM 结构在训练阶段的收敛难度较大。因此，在实际训练过程中，可以采用 DNN 跟踪器作为先验或指导模型，以提升训练初期的稳定性和收敛速度。相关实现细节可参考 `Lower_update/Lower_update_LSTM_trainer.py`
 
-* 在我们后续的工作中，轨迹规划器所给出的轨迹将包含模态信息，因此模态决策模块的重要性将略微下降
+* 模态决策的方法主要有三种：一是通过网络智能决策，允许提前停车；二是遍历所有可能的模态进行选择，但只能决策下一步，无法保持前瞻性；三是给定的轨迹已经包含了模态信息和减速过程。***我们后续的工作中，轨迹规划器会直接给出包含模态信息的轨迹，因此模态决策模块的重要性将略微下降，相关整理和开源进度将暂时推迟***
+
 ---
 
 ### 相关引用
@@ -188,3 +176,7 @@ pip install torch==2.7.0+cu128 --extra-index-url https://download.pytorch.org/wh
 }
 ```
 </details>
+
+
+
+

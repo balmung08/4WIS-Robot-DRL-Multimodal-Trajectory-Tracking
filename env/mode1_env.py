@@ -517,12 +517,10 @@ class SimulationEnv(gym.Env):
         ]
 
         # 阿克曼转向: 前轮转向，后轮对称
-        wheel_angles = [
-            self.state_steering,  # FL
-            self.state_steering,  # FR
-            -self.state_steering,  # RL
-            -self.state_steering,  # RR
-        ]
+        wheel_angles = self.trajectory_generator.kinematics.compute_wheel_angles(
+            SteeringMode.ACKERMANN,
+            self.state_steering
+        )
 
         for (ox, oy), delta in zip(wheel_offsets, wheel_angles):
             wheel_pos = (R @ np.array([ox, oy])) + np.array([x, y])

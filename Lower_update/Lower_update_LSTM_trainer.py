@@ -1,4 +1,13 @@
 import os
+import sys
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
+
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+import os
 import gym
 import torch
 import torch.nn as nn
@@ -6,18 +15,19 @@ import torch.nn.functional as F
 from stable_baselines3 import SAC
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 from stable_baselines3.common.callbacks import EvalCallback
-from env.mode1_env import SimulationEnv
+
 from stable_baselines3.common.logger import configure
 
-# ============================
+# 环境的编号需要根据模态调整
+from env.mode1_env import SimulationEnv
+
+
 # LSTM 特征提取器
-# ============================
 class TrajLSTMFeatureExtractor(BaseFeaturesExtractor):
     """
     使用 LSTM 处理序列观测
     输入形状: (seq_len=5, feature_dim=12)
     """
-
     def __init__(self, observation_space: gym.spaces.Box, features_dim: int = 128):
         super().__init__(observation_space, features_dim)
         self.seq_len = observation_space.shape[0]  # 5
@@ -40,14 +50,14 @@ class TrajLSTMFeatureExtractor(BaseFeaturesExtractor):
         return features
 
 
-# ============================
+
 # 主训练函数
-# ============================
+
 def main():
     # ===== 配置参数 =====
     total_steps = 1000000
-    guided_steps = 200000  # 前一半步数使用指导模型
-    log_dir = "../checkpoints/LSTM_best_models/"
+    guided_steps = 200000  # 前一部分步数使用指导模型
+    log_dir = "./checkpoints/LSTM_best_models/"
     os.makedirs(log_dir, exist_ok=True)
 
     # ===== 创建环境 =====
@@ -56,7 +66,7 @@ def main():
 
     # ===== 加载指导模型 =====
     print("Loading guided model...")
-    guided_model = SAC.load("../checkpoints/DNN_best_models/best_model", env=guided_env)
+    guided_model = SAC.load("./checkpoints/DNN_best_models/best_model", env=guided_env)
 
     # ===== 定义策略网络结构 =====
     policy_kwargs = dict(
@@ -77,9 +87,9 @@ def main():
         gradient_steps=1,
         verbose=1,
         learning_starts=1000,
-        tensorboard_log="../sac_lstm_tensorboard/"
+        tensorboard_log="./sac_lstm_tensorboard/"
     )
-    new_logger = configure("../sac_tensorboard/", ["stdout", "tensorboard"])
+    new_logger = configure("./sac_tensorboard/", ["stdout", "tensorboard"])
     model.set_logger(new_logger)
 
 
