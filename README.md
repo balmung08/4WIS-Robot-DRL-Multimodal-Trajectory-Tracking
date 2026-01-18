@@ -62,7 +62,7 @@ pip install torch==2.7.0+cu128 --extra-index-url https://download.pytorch.org/wh
 <p align="center"><img src="document/compare.png" width="80%"></p>
 
 * It is important to note that the convergence difficulty of the LSTM structure increases significantly during training. Therefore, during actual training, a DNN tracker can be used as a prior or guiding model to improve stability and convergence speed in the early stages. Relevant implementation details can be found in `Lower_update/Lower_update_LSTM_trainer.py`
-* The methods for mode decision-making can be categorized into three main approaches: the first is to allow network-based intelligent decision-making for early stopping; the second is to explore all possible modes to select, but it can only decide the next step without foresight; the third is that the given trajectory already includes mode information and deceleration process. ***In our future work, the trajectory planner will directly provide trajectories containing mode information, so the importance of the mode decision module will slightly decrease. The organization and open-source progress of this will be postponed for the time being***
+* The methods for mode decision-making can be categorized into three main approaches: the first is to allow network-based intelligent decision-making for early stopping; the second is to explore all possible modes to select, but it can only decide the next step without foresight; the third is that the given trajectory already includes mode information and deceleration process. ***In our future work, the trajectory planner will directly provide trajectories containing mode information, so the importance of the mode decision module will slightly decrease. The organization and open-source progress of this will be postponed for the time being ([https://github.com/balmung08/4WIS-Robot-Multimodal-Trajectory-Planning](https://github.com/balmung08/4WIS-Robot-Multimodal-Trajectory-Planning))***
 
 
 ---
@@ -160,7 +160,8 @@ pip install torch==2.7.0+cu128 --extra-index-url https://download.pytorch.org/wh
 
 * 需要注意的是，LSTM 结构在训练阶段的收敛难度较大。因此，在实际训练过程中，可以采用 DNN 跟踪器作为先验或指导模型，以提升训练初期的稳定性和收敛速度。相关实现细节可参考 `Lower_update/Lower_update_LSTM_trainer.py`
 
-* 模态决策的方法主要有三种：一是通过网络智能决策，允许提前停车；二是遍历所有可能的模态进行选择，但只能决策下一步，无法保持前瞻性；三是给定的轨迹已经包含了模态信息和减速过程。***我们后续的工作中，轨迹规划器会直接给出包含模态信息的轨迹，因此模态决策模块的重要性将略微下降，相关整理和开源进度将暂时推迟***
+* 模态决策的方法主要有三种：一是通过网络智能决策，允许提前停车；二是遍历所有可能的模态进行选择，但只能决策下一步，无法保持前瞻性；三是给定的轨迹已经包含了模态信息和减速过程。***我们后续的工作中，轨迹规划器会直接给出包含模态信息的轨迹，因此模态决策模块的重要性将略微下降，相关整理和开源进度将暂时推迟 ([https://github.com/balmung08/4WIS-Robot-Multimodal-Trajectory-Planning](https://github.com/balmung08/4WIS-Robot-Multimodal-Trajectory-Planning))***
+
 
 ---
 
