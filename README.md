@@ -56,6 +56,7 @@ pip install torch==2.7.0+cu128 --extra-index-url https://download.pytorch.org/wh
 * The design of the state and action spaces draws on MPC-based lookahead optimization methods, ensuring that the tracker has foresight and can adjust the control strategy based on changes in the trajectory ahead
 * In addition to the paper, we have added wheel angle and velocity calculation based on Ackermann steering principles, which helps reduce tire wear and improves execution efficiency
 * We introduced a discount factor in the future distance error term, which aids in making the deceleration to stop smoother at the terminal
+* The trajectory generation process involves some discontinuities in state variables, which can improve the randomness and adaptability of the generated trajectory. However, in practical applications, it is recommended to ensure the continuity of the target trajectory's state
 * Compared to pure DNN structures, the introduction of LSTM has led to improvements in trajectory tracking accuracy and stability. The quantitative comparison for the Ackermann mode is shown below
 
 <p align="center"><img src="document/compare.png" width="80%"></p>
@@ -97,7 +98,7 @@ If this code repository is helpful to your research, please cite the following p
 * 为不同的运动模态设计了基于 MPC 前视结构的 DRL（深度强化学习）轨迹跟踪器
 * 构建了一个基于目标轨迹特性的自主运动模态决策机制，能够在多模态运动空间中合理切换
 
-<p align="center"><img src="document/method.jpg" width="90%"></p>
+<p align="center"><img src="document/method.jpg" width="80%"></p>
 
 > 多运动模态下跟踪效果演示
 
@@ -150,6 +151,8 @@ pip install torch==2.7.0+cu128 --extra-index-url https://download.pytorch.org/wh
 * 在论文基础上，我们增加了基于阿克曼转向原理的车轮转角与速度解算，能够减少机器人轮胎的磨损并提升执行效率
 
 * 通过测试，我们在未来的距离误差项中引入了折扣因子，这有助于提升终端减速至停止过程的平滑性
+
+* 在轨迹生成过程中存在部分状态量不连续现象，借此可以提升生成轨迹的随机性与适应性。在实际使用时建议保证目标轨迹的状态连续性
 
 * 与纯 DNN 结构相比，引入 LSTM 后，轨迹跟踪精度和稳定性有所提高。以下是阿克曼模态下的定量对比结果
 
